@@ -1,0 +1,13 @@
+.card-wrapper{
+  width: 400px;
+  height: 142px;
+  background-color: red;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.card{
+  width: 80px;
+  height: 135px;
+  background-color: blue;
+}
