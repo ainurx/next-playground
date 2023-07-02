@@ -40,7 +40,6 @@ class Post extends Component{
       this.setState({ isLoading: true })
 
       const result = await fetch(`https://rickandmortyapi.com/api/character/?page=${this.state.page}`)
-      // console.log('=> Data ...')
       const data = await result.json()
       // console.log(data.results)
 
@@ -52,35 +51,56 @@ class Post extends Component{
     }
   }
 
-  isInMasonry(comp){
+  isInMasonry(comp, index){
     const mWidth = this.masonryRef.current.getBoundingClientRect().width
     const mHeight = this.masonryRef.current.getBoundingClientRect().height
-    // console.log('=== MASONRY height & width ===')
-    // console.log(`width: ${mWidth}`)
-    // console.log(`height: ${mHeight}`)
+    if(index === 0){
+      console.log(`=== MASONRY height & width [${index}] ===`)
+      console.log(`width: ${mWidth}`)
+      console.log(`height: ${mHeight}`)
+      console.log(comp)
+    } 
 
-    if(comp.top >= 0 && comp.left >= 0 && comp.bottom <= mHeight && comp.right <= mWidth ){
-      return true
+    if(index % 2 === 0){
+      if(comp.top <= 94 && comp.top >= 24 && comp.bottom <= mHeight ){
+        console.log(`comp[${index}].componentTop => ${Math.round(comp.top)}`)
+        this.cardRef[index].style.backgroundColor = 'red'
+        return true
+      } else {
+        this.cardRef[index].style.backgroundColor = 'white'
+        return false
+      }
     } else {
-      return false
+      if(comp.top <= 23 && comp.top >= -120 && comp.bottom <= mHeight ){
+        // console.log(`comp[${index}].componentTop => ${Math.round(comp.top)}`)
+        this.cardRef[index].style.backgroundColor = 'red'
+        return true
+      } else {
+        this.cardRef[index].style.backgroundColor = 'white'
+        return false
+      }
     }
   }
 
   handleScroll(){
-    const { documentElement } = document
+    // const { documentElement } = document
+    console.log('handleScroll....')
+    // console.log(this.cardRef[0].getBoundingClientRect())
     map(this.cardRef, (card, index)=>{
-      console.log(index)
-      console.log(this.isInMasonry(card.getBoundingClientRect()))
+      if(this.isInMasonry(card.getBoundingClientRect(), index)){
+        // console.log(`card[${index}] is inside view`)
+        // if(card.getBoundingClientRect().top <= 90 && card.getBoundingClientRect().top >= 2){
+        //   // card.style.backgroundColor = 'red'
+        // } else {
+        //   card.style.backgroundColor = 'white'
+        // }
+        console.log(`top[${index}] => ${card.getBoundingClientRect().top}`)
+      }
       // console.log(card.getBoundingClientRect())
     })
-    console.log(this.cardRef)
 
-    // const cardProps = this.cardRef.current.getProps()
-    // const card = this.cardRef.current.getCurrent()
+    if(Math.round(this.masonryRef.current.scrollTop + this.masonryRef.current.offsetHeight) !== this.masonryRef.current.scrollHeight || this.refreshing){
 
-    // console.log(cardProps.name)
-    // console.log(card.getBoundingClientRect())
-    if(this.masonryRef.current.innerHeight + documentElement.scrollTop !== documentElement.offsetHeight || this.state.isLoading){
       return
     }
     this.fetchData()
@@ -95,8 +115,8 @@ class Post extends Component{
       <Container style={{ justifyContent: 'center', display: 'flex'}}>
         <div style={{ display: 'block', backgroundColor: '#F5F5F5'}}>
           <h1>Post</h1>
-          <div style={{ width: '700px', overflowX: 'hidden', overflowY: 'scroll', height: 480}}>
-            <Masonry ref={this.masonryRef} columns={2} spacing={2} style ={{ margin: 0 }}>
+          <div ref={this.masonryRef} style={{ width: '700px', overflowX: 'hidden', overflowY: 'scroll', height: 480}}>
+            <Masonry columns={2} spacing={2} style ={{ margin: 0 }}>
               {
                 this.state.items.map((item, index)=>(
                   <Card
