@@ -1,6 +1,23 @@
-import { forwardRef, useEffect, useRef, useImperativeHandle } from "react"
+import { Component, forwardRef, useEffect, useRef, useImperativeHandle } from "react"
 
 import ProgressiveImage from "./ProgressiveImage"
+
+class MainCard extends Component{
+
+  componentDidMount(){
+    console.log(this.props)
+  }
+
+  render(){
+    return(
+      <div ref={this.props.forwardRef} style={{ backgroundColor: 'white', borderRadius: '8px', padding: '8px', border: '1px solid #ababab', paddingBottom: '12px'}}>
+        <ProgressiveImage image={this.props.profile} style={{ width: '100%', borderRadius: '1em' }}/>
+        <p>{this.props.name} - {this.props.species}</p>
+        <b>{this.props.location}</b>
+      </div>
+    )
+  }
+}
 
 const Card = forwardRef((props, ref)=>{
   // const cardRef = useRef()
@@ -14,18 +31,18 @@ const Card = forwardRef((props, ref)=>{
   //   }
   // }));
   useEffect(()=>{
+    console.log('ref from parent')
+    console.log(ref)
     if(ref){
+      console.log(`===> Card[] forwardRef useEffect`)
+      console.log(ref)
       // console.log(ref.current)
       ref.current = { index: props.index, node: ref.current }
     }
   }, [ref, props.index])
 
   return(
-    <div ref={ref} style={{ backgroundColor: 'white', borderRadius: '8px', padding: '8px', border: '1px solid #ababab', paddingBottom: '12px'}}>
-      <ProgressiveImage image={props.profile} style={{ width: '100%', borderRadius: '1em' }}/>
-      <p>{props.name} - {props.species}</p>
-      <b>{props.location}</b>
-    </div>
+    <MainCard forwardRef={ref} {...props}/>
   ) 
 })
 

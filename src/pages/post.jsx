@@ -4,7 +4,7 @@ import {map} from 'lodash'
 import { Container } from '@mui/material';
 import Masonry from '@mui/lab/Masonry';
 
-import Card from '@/components/Card'
+import Card from '../components/Card'
 
 class Post extends Component{
   constructor(props){
@@ -55,16 +55,17 @@ class Post extends Component{
     const mWidth = this.masonryRef.current.getBoundingClientRect().width
     const mHeight = this.masonryRef.current.getBoundingClientRect().height
     if(index === 0){
-      console.log(`=== MASONRY height & width [${index}] ===`)
-      console.log(`width: ${mWidth}`)
-      console.log(`height: ${mHeight}`)
-      console.log(comp)
+      console.log(this.cardRef[0].getBoundingClientRect())
+      // console.log(`=== MASONRY height & width [${index}] ===`)
+      // console.log(`width: ${mWidth}`)
+      // console.log(`height: ${mHeight}`)
+      // console.log(comp)
     } 
 
     if(index % 2 === 0){
       if(comp.top <= 94 && comp.top >= 24 && comp.bottom <= mHeight ){
-        console.log(`comp[${index}].componentTop => ${Math.round(comp.top)}`)
-        this.cardRef[index].style.backgroundColor = 'red'
+        // console.log(`comp[${index}].componentTop => ${Math.round(comp.top)}`)
+        this.cardRef[index].style.backgroundColor = 'green'
         return true
       } else {
         this.cardRef[index].style.backgroundColor = 'white'
@@ -85,8 +86,11 @@ class Post extends Component{
   handleScroll(){
     // const { documentElement } = document
     console.log('handleScroll....')
+    console.log(this.masonryRef.current.scrollTop)
     // console.log(this.cardRef[0].getBoundingClientRect())
     map(this.cardRef, (card, index)=>{
+      // console.log('==> card <==')
+      // console.log(card.title)
       if(this.isInMasonry(card.getBoundingClientRect(), index)){
         // console.log(`card[${index}] is inside view`)
         // if(card.getBoundingClientRect().top <= 90 && card.getBoundingClientRect().top >= 2){
@@ -94,7 +98,7 @@ class Post extends Component{
         // } else {
         //   card.style.backgroundColor = 'white'
         // }
-        console.log(`top[${index}] => ${card.getBoundingClientRect().top}`)
+        // console.log(`top[${index}] => ${card.getBoundingClientRect().top}`)
       }
       // console.log(card.getBoundingClientRect())
     })
@@ -107,6 +111,7 @@ class Post extends Component{
   }
 
   setRef = (index) => (ref) => {
+    console.log(`===> POST[] setRef()`)
     this.cardRef[index] = ref
   }
 
